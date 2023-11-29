@@ -25,13 +25,27 @@ class UserController extends Controller
             [
                 'access' => [
                     'class' => AccessControl::class,
-                    'only' => ['index', 'create', 'update'],
+                    'only' => ['index', 'create', 'update','delete'],
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'create', 'update'],
-                            'roles' => ['@'],
+                            'actions' => ['create'],
+                            'roles' => ['?'],
                         ],
+                        [
+                            'allow' => true,
+                            'actions' => ['update'],
+                            'roles' => ['@'],
+                            'matchCallback' => function () {
+                                return Yii::$app->user->id;}
+                        ],
+                        [
+                            'actions' => ['index','delete'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function () {
+                                return Yii::$app->user->identity->isAdmin();}
+                        ]
                     ],
                 ],
                 'verbs' => [

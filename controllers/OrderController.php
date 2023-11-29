@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Order;
+use app\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -25,13 +26,20 @@ class OrderController extends Controller
             [
                 'access' => [
                     'class' => AccessControl::class,
-                    'only' => ['index'],
+                    'only' => ['index', 'create', 'delete'],
                     'rules' => [
                         [
-                            'actions' => ['index'],
+                            'actions' => ['index', 'create'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
+                        [
+                            'actions' => ['delete'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function () {
+                                return Yii::$app->user->identity->isAdmin();}
+                        ]
                     ],
                 ],
                 'verbs' => [
@@ -70,10 +78,12 @@ class OrderController extends Controller
         if (Yii::$app->user->identity->isAdmin()) {
             $query = Order::find();
         } else {
-            $query = Order::find()->where(['user_id'=>Yii::$app->user->getId()]);
+            $query = Order::find()->where(['user_id' => Yii::$app->user->getId()]);
         }
+//        $user = User::class;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+//            'user' => $user
         ]);
 
         return $this->render('index', [

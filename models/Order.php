@@ -60,7 +60,7 @@ class Order extends \yii\db\ActiveRecord
         return [
             'discription' => 'Описание',
             'user_id' => 'User ID',
-            'username' => 'ФИО',
+            'username' => 'Заказчик',
             'servise' => 'Услуга',
             'date' => 'Дата',
             'price' => 'Цена',

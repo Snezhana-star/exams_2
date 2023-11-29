@@ -25,12 +25,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['attribute' => 'id',
-                'format'=>'html',
+                'format' => 'html',
                 'value' => function ($data) {
-                    return \yii\helpers\Html::a($data->id,'/exams_2/web/order/view?id=' . $data->id);
+                    return \yii\helpers\Html::a($data->id, '/exams_2/web/order/view?id=' . $data->id);
                 },
             ],
-            'username',
+            [
+                'attribute' => 'username',
+                'value' => function ($data) {
+                    return $data->user->name;
+                }
+
+            ],
+
             'discription',
             'servise',
 
@@ -45,7 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->getStatusText();
                 }
             ],
-
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Order $model, $key, $index, $column) {
